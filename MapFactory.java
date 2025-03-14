@@ -1,3 +1,6 @@
+/*
+ * Clase que crea un mapa de acuerdo a la eleccion del usuario
+ */
 import java.util.Map;
 import java.util.HashMap;
 import java.util.TreeMap;
