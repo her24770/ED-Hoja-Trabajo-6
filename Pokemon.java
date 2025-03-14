@@ -179,4 +179,22 @@ public class Pokemon {
         this.isLegendary = isLegendary;
     }
 
+    /*
+     * Meotod impresion de detalles del poémon
+     */
+    @Override
+    public String toString() {
+        return "Pokemon{" +
+                "name='" + name + '\'' +
+                ", pokedexNumber=" + pokedexNumber +
+                ", type1='" + type1 + '\'' +
+                ", type2='" + type2 + '\'' +
+                ", classification='" + classification + '\'' +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", abilities=" + abilities +
+                ", generation=" + generation +
+                ", isLegendary=" + isLegendary +
+                '}';
+    }
 }

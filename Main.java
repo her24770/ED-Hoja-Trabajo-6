@@ -12,7 +12,7 @@ public class Main {
         MapFactory mapFactory = new MapFactory();
 
         // Pedir al usuario que elija una implementación de Map
-        System.out.println("Select Map implementation:");
+        System.out.println("Seleccione el tipo de Map a utilizar:");
         System.out.println("1. HashMap");
         System.out.println("2. TreeMap");
         System.out.println("3. LinkedHashMap");
@@ -22,51 +22,52 @@ public class Main {
         // Crear el Map usando el Factory
         Map<String, Pokemon> pokemonMap = mapFactory.createMap(choice);
 
-        // Leer el archivo CSV y cargar los datos en el Map
         readCSV("pokemon_data_pokeapi.csv", pokemonMap);
 
         // Lista para la colección del usuario
         List<Pokemon> userCollection = new ArrayList<>();
 
-        // Menú de operaciones
-        while (true) {
+        // Menu en loop 
+        boolean loop = true;
+        while (loop) {
             System.out.println("\nSelect operation:");
-            System.out.println("1. Add Pokémon to collection");
-            System.out.println("2. Show Pokémon data");
-            System.out.println("3. Show user's Pokémon by type");
-            System.out.println("4. Show all Pokémon by type");
-            System.out.println("5. Show Pokémon by ability");
+            System.out.println("1. Agregar pokémon a tu coleccion");
+            System.out.println("2. Mosrtar informacion por nommbre");
+            System.out.println("3. Mostrar pókemon de tu coleccion por tipo1");
+            System.out.println("4. Mostrar pókemon por tipo1");
+            System.out.println("5. Mostrar pókemon por abilidad");
             System.out.println("6. Exit");
-            int operation = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            System.out.print("Ingresa tu opcion : ");
+            String operation = scanner.nextLine();
 
             switch (operation) {
-                case 1:
-                    System.out.println("Enter Pokémon name:");
+                case "1":
+                    System.out.println("Ingresar nombre del pókemon:");
                     String name = scanner.nextLine();
-                    ControllerPokemon.addPokemonToCollection(pokemonMap, userCollection, name);
+                    ControllerPokemon.addColeccion(pokemonMap, userCollection, name);
                     break;
-                case 2:
-                    System.out.println("Enter Pokémon name:");
-                    name = scanner.nextLine();
-                    ControllerPokemon.showPokemonData(pokemonMap, name);
+                case "2":
+                System.out.println("Ingresar nombre del pókemon:");
+                name = scanner.nextLine();
+                    ControllerPokemon.mostrarDeswcripcion(pokemonMap, name);
                     break;
-                case 3:
-                    ControllerPokemon.showPokemonsByType(userCollection);
+                case "3":
+                    ControllerPokemon.mostrarColeccionPorTipo1(userCollection);
                     break;
-                case 4:
-                    ControllerPokemon.showAllPokemonsByType(pokemonMap);
+                case "4":
+                    ControllerPokemon.mostrarListaPorTipo1(pokemonMap);
                     break;
-                case 5:
-                    System.out.println("Enter ability:");
-                    String ability = scanner.nextLine();
-                    ControllerPokemon.showPokemonsByAbility(pokemonMap, ability);
+                case "5":
+                System.out.println("Ingresar habilidad");
+                String ability = scanner.nextLine();
+                    ControllerPokemon.mostrarPorHabilidad(pokemonMap, ability);
                     break;
-                case 6:
-                    System.out.println("Exiting...");
-                    return;
+                case "6":
+                    System.out.println("Saliendo...");
+                    loop = false;
+                    break;
                 default:
-                    System.out.println("Invalid operation.");
+                    System.out.println("Valor invalido");
             }
         }
     }
@@ -74,10 +75,10 @@ public class Main {
     // Función para leer el archivo CSV y cargar los datos en el Map
     public static void readCSV(String filePath, Map<String, Pokemon> pokemonMap) {
         try (Scanner fileScanner = new Scanner(new File(filePath))) {
-            fileScanner.nextLine(); // Saltar la primera línea (encabezados)
+            fileScanner.nextLine(); 
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
-                String[] data = parseCSVLine(line); // Usar una función para manejar comillas
+                String[] data = parseLine(line); 
 
                 // Extraer los datos del Pokémon
                 String name = data[0];
@@ -87,14 +88,12 @@ public class Main {
                 String classification = data[4];
                 double height = Double.parseDouble(data[5]);
                 double weight = Double.parseDouble(data[6]);
-                List<String> abilities = Arrays.asList(data[7].split(", ")); // Separar las habilidades
+                List<String> abilities = Arrays.asList(data[7].split(", "));
                 int generation = Integer.parseInt(data[8]);
                 boolean isLegendary = data[9].equalsIgnoreCase("Yes");
 
-                // Crear el objeto Pokemon
                 Pokemon pokemon = new Pokemon(name, pokedexNumber, type1, type2, classification, height, weight, abilities, generation, isLegendary);
 
-                // Guardar el Pokémon en el Map
                 pokemonMap.put(name, pokemon);
             }
         } catch (FileNotFoundException e) {
@@ -103,26 +102,24 @@ public class Main {
     }
 
     // Función para manejar comillas en el CSV
-    public static String[] parseCSVLine(String line) {
-        List<String> values = new ArrayList<>();
+    public static String[] parseLine(String line) {
+        List<String> tokens = new ArrayList<>();
         StringBuilder currentValue = new StringBuilder();
         boolean comillas = false;
 
-        for (char c : line.toCharArray()) {
-            if (c == '"') {
-                comillas = !comillas; // Cambiar el estado de "dentro de comillas"
-            } else if (c == ',' && !comillas) {
-                // Si no estamos dentro de comillas, agregar el valor actual a la lista
-                values.add(currentValue.toString().trim());
-                currentValue = new StringBuilder(); // Reiniciar el valor actual
+        for (char ch : line.toCharArray()) {
+            if (ch == '"') {
+                comillas = !comillas; 
+            } else if (ch == ',' && !comillas) {
+                tokens.add(currentValue.toString().trim());
+                currentValue = new StringBuilder(); 
             } else {
-                currentValue.append(c); // Agregar el carácter al valor actual
+                currentValue.append(ch); 
             }
         }
 
-        // Agregar el último valor
-        values.add(currentValue.toString().trim());
+        tokens.add(currentValue.toString().trim());
 
-        return values.toArray(new String[0]);
+        return tokens.toArray(new String[0]);
     }
 }
