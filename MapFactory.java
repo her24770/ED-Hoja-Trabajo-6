@@ -7,15 +7,16 @@ import java.util.TreeMap;
 import java.util.LinkedHashMap;
 
 public class MapFactory {
-    public Map<String, Pokemon> createMap(int choice) {
+    public Map<String, Pokemon> createMap(String choice) {
         switch (choice) {
-            case 1:
+            case "1":
                 return new HashMap<>();
-            case 2:
+            case "2":
                 return new TreeMap<>();
-            case 3:
+            case "3":
                 return new LinkedHashMap<>();
             default:
+            System.out.println("Opcion invalida");
                 throw new IllegalArgumentException("Opcion invalida");
         }
     }

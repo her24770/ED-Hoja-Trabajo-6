@@ -16,8 +16,8 @@ public class Main {
         System.out.println("1. HashMap");
         System.out.println("2. TreeMap");
         System.out.println("3. LinkedHashMap");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        System.out.print("Ingresa tu opcion : ");
+        String choice = scanner.nextLine();
 
         // Crear el Map usando el Factory
         Map<String, Pokemon> pokemonMap = mapFactory.createMap(choice);
